@@ -1,0 +1,55 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+builddir = build/artifacts/jdk1.5
+
+include /usr/share/gcj/debian_defaults
+
+#exclude sparc for now as there is a gcj bug which prevents its optimizations from compiling
+export BUILD_NATIVE = $(filter-out sparc%, $(gcj_native_archs))
+
+DEB_HOST_ARCH ?= $(shell dpkg-architecture qDEB_HOST_ARCH)
+ifneq (,$(filter $(DEB_HOST_ARCH), $(BUILD_NATIVE)))
+  with_native := yes
+endif
+
+jars = bcmail
+
+common-build-indep:: stamp-build-indep
+stamp-build-indep:
+	sh -x ./build1-5
+	#sh -x ./build1-5 test
+	mkdir -p debian/build
+	set -e; \
+	for j in $(jars); do \
+	  install -m 644 $(builddir)/jars/$$j-jdk15-*.jar \
+	    debian/build/$$j.jar; \
+	done
+	touch stamp-build-indep
+
+clean::
+	rm -f stamp-*
+	rm -rf build debian/build
+	rm -f *.bpg test.* large.* secret.asc pub.asc
+	rm -rf debian/.mh
+
+# bcmail
+binary-install/libbcmail146-java:: build/libbcmail146-java
+	mh_installpoms -plibbcmail146-java
+	mh_installjar -plibbcmail146-java -l debian/poms/bcmail.pom $(builddir)/jars/bcmail-jdk15-*.jar
+	rm -f debian/libbcmail146-java/usr/share/java/bcmail.jar
+
+POMS=bcprov bcpg bcmail bctsp
+UPSTREAM_VERSION=$(shell dpkg-parsechangelog | sed -rne 's,^Version: ([^-]+).*,\1,p' | sed 's/\+dfsg//')
+
+get-orig-pom:
+	mkdir -p debian/poms
+	for pom in $(POMS); do \
+		wget -O debian/poms/$${pom}.pom -U NoAgent-1.0 \
+			http://repo1.maven.org/maven2/org/bouncycastle/$${pom}-jdk55/$(UPSTREAM_VERSION)/$${pom}-jdk15-$(UPSTREAM_VERSION).pom ; \
+	done ;
+
+get-orig-source:
+	-uscan --download-version `echo $(DEB_UPSTREAM_VERSION) |sed -e 's/\.//g;s/\+dfsg//'` --force-download --debug --rename

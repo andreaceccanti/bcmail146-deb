@@ -1,0 +1,64 @@
+Description: Modify JAR paths and pass unicode flag to javac targets for proper compilation
+Author: Brian Thomason <brian.thomason@eucalyptus.com>
+
+--- bouncycastle-1.46+dfsg.orig/build1-5
++++ bouncycastle-1.46+dfsg/build1-5
+@@ -6,10 +6,10 @@
+ # otherwise it just creates the docs and class files.
+ #
+ 
+-JDKPATH=/opt/jdk1.5.0   # JDK 1.5 location
+-JAVA_MAIL_HOME=/opt/javamail
+-JAVA_ACTIVATION_HOME=/opt/jaf
+-JUNIT_HOME=/opt/junit
++JDKPATH=/usr/lib/jvm/default-java
++JAVA_MAIL_HOME=/usr/share/java
++JAVA_ACTIVATION_HOME=/usr/share/java
++JUNIT_HOME=/usr/share/java
+ 
+ JAVA_HOME=$JDKPATH
+ export JAVA_HOME
+@@ -17,7 +17,7 @@ export JAVA_HOME
+ PATH=$JDKPATH/bin:$PATH
+ export PATH
+ 
+-CLASSPATH=$JAVA_MAIL_HOME/mail.jar:$JAVA_ACTIVATION_HOME/activation.jar:$JUNIT_HOME/junit.jar:$CLASSPATH
++CLASSPATH=$JAVA_MAIL_HOME/gnumail.jar:$JAVA_ACTIVATION_HOME/activation.jar:$JUNIT_HOME/junit.jar:$CLASSPATH
+ export CLASSPATH
+ 
+ if [ "$1" = "test" ]
+@@ -27,7 +27,7 @@ else
+     if ant -f jdk15.xml build-provider
+     then
+         ant -f jdk15.xml build
+-        ant -f jdk15.xml zip-src
++        #ant -f jdk15.xml zip-src
+     fi
+ fi
+ 
+--- bouncycastle-1.46+dfsg.orig/bc-build.xml
++++ bouncycastle-1.46+dfsg/bc-build.xml
+@@ -101,6 +101,7 @@
+                             <include name="**/*.jar" />
+                         </fileset>
+                     </classpath>
++                <compilerarg line="-encoding utf-8"/>
+                 </javac>
+                 <copy todir="${build.dir}/@{target}/classes">
+                      <fileset dir="${artifacts.dir}/@{target}/src" includes="**/*.properties" />
+@@ -131,6 +132,7 @@
+                     srcdir="${artifacts.dir}/@{target}/src"
+                     destdir="${build.dir}/@{target}/classes"
+                     debug="${release.debug}">
++                <compilerarg line="-encoding utf-8"/>
+                     <classpath>
+                         <fileset dir="${artifacts.jars.dir}">
+                             <include name="**/*.jar" />
+@@ -238,6 +240,7 @@
+             srcdir="${lcrypto.target.src.dir}"
+             destdir="${lcrypto.target.classes.dir}"
+             debug="${release.debug}">
++        <compilerarg line="-encoding utf-8"/>
+         </javac>
+     </target>
+ 

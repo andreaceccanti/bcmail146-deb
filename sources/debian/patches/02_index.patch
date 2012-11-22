@@ -1,0 +1,13 @@
+Description: Refer to documentation contained in doc package
+
+--- bouncycastle-1.46+dfsg.orig/index.html
++++ bouncycastle-1.46+dfsg/index.html
+@@ -36,7 +36,7 @@ The current specifications for this pack
+ <a href=specifications.html>here</a>.
+ <p>
+ The current api documentation for this package is
+-<a href=docs/index.html>here</a>.
++in the corresponding libbc*-java-doc Debian package.
+ </p>
+ </p>
+ <h2>Examples and Tests</h2>

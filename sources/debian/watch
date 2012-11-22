@@ -1,0 +1,4 @@
+version=3
+opts=dversionmangle=s/\.//g;s/\+dfsg// \
+	http://www.bouncycastle.org/latest_releases.html \
+	download/crypto-([\d\.]+)\.tar\.gz debian debian/orig-tar.sh

@@ -1,0 +1,5 @@
+# Strip out -jdk14 as Ubuntu/Debian does not build multiple versions
+org.bouncycastle s/bcmail-jdk14/bcmail/ * s/.*/debian/ * *
+org.bouncycastle s/bcprov-jdk14/bcprov/ * s/.*/debian/ * *
+org.bouncycastle s/bctsp-jdk14/bctsp/ * s/.*/debian/ * *
+org.bouncycastle s/bcpg-jdk14/bcpg/ * s/.*/debian/ * *

@@ -1,0 +1,23 @@
+Source: bouncycastle
+Section: java
+Priority: optional
+Maintainer: Debian Java Maintainers <pkg-java-maintainers@lists.alioth.debian.org>
+Uploaders: Brian Thomason <brian.thomason@eucalyptus.com>
+Build-Depends: cdbs (>= 0.4.27), debhelper (>= 7.0.50~), ant, gcj-native-helper, libgnumail-java,
+ junit, ant-optional, maven-repo-helper, default-jdk (>= 1:1.6)
+Standards-Version: 3.9.1
+Vcs-Svn: svn://svn.debian.org/svn/pkg-java/trunk/bouncycastle
+Vcs-Browser: http://svn.debian.org/wsvn/pkg-java/trunk/bouncycastle
+Homepage: http://www.bouncycastle.org/
+DM-Upload-Allowed: yes
+
+Package: libbcmail146-java
+Architecture: all
+Depends: libbcprov146-java, libgnumail-java, libgnujaf-java, ${misc:Depends}
+# Suggests: libbcmail-java-doc,libbcmail-java-gcj
+Description: Bouncy Castle generators/processors for S/MIME and CMS
+ The Bouncy Castle Crypto package is a Java implementation of
+ cryptographic algorithms.
+ .
+ This package contains generators and processors for S/MIME and CMS
+ (PKCS7/RFC 3852).
